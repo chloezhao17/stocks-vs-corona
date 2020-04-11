@@ -19,12 +19,12 @@ We will be using the yfinance python library to pull yahoo finance data and stor
 
 Example sets of stocks we will be pulling are below:
 
-| Airlines (JETS)         | Tech (XLK)       | Energy (XLE) | Retail (XRT) | Media (XLC) | Travel/Transporation (AWAY) | Misc      |
-| ----------------------- | ---------------- | ------------ | ------------ | ----------- | --------------------------- | --------- |
-| Delta (DAL)             | Microsoft (MSFT) | ---          | ---          | ---         | Uber (UBER)                 | ZOOM (ZM) |
-| American Airlines (AAL) | Apple (AAPL)     | ---          | ---          | ---         | Booking (BKNG)              | ---       |
-| Southwest (LUV)         | Visa (V)         | ---          | ---          | ---         | Lyft (LYFT)                 | ---       |
-| United Airlines (UAL)   | Intel (INTC)     | ---          | ---          | ---         | Trip.com (TCOM)             | ---       |
+| Airlines (JETS)         | Tech (XLK)       | Utilities (VPU) | Retail (XRT) | Media (XLC) | Travel/Transporation (AWAY) | Misc      |
+| ----------------------- | ---------------- | --------------- | ------------ | ----------- | --------------------------- | --------- |
+| Delta (DAL)             | Microsoft (MSFT) | ---             | ---          | ---         | Uber (UBER)                 | ZOOM (ZM) |
+| American Airlines (AAL) | Apple (AAPL)     | ---             | ---          | ---         | Booking (BKNG)              | ---       |
+| Southwest (LUV)         | Visa (V)         | ---             | ---          | ---         | Lyft (LYFT)                 | ---       |
+| United Airlines (UAL)   | Intel (INTC)     | ---             | ---          | ---         | Trip.com (TCOM)             | ---       |
 
 ## Visualizations
 
@@ -33,5 +33,7 @@ Example sets of stocks we will be pulling are below:
 ## Final Design Sketch
 
 We will incoporate a dropdown list that allows the user to select the stocks they would like to see graphed. The user will also be able to input date ranges to view the stocks. They will also be able to select time spans from a set of buttons (ie. 1 month, 3 months, 1 year, etc.)
+
+![Site Wireframe](images/wireframe.jpg)
 
 ## [Github Page](https://github.com/djbailey20/stocks-vs-corona)
