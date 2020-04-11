@@ -11,11 +11,20 @@
 
 ## Chosen Topic
 
-We will be analyzing airline and video conferencing stock market prices to see how they have changed due to the CoronaVirus pandemic.
+We will be analyzing different sectors in the stock market to see how their stock prices have changed due to the CoronaVirus pandemic.
 
 ## Data Sets
 
 We will be using the yfinance python library to pull yahoo finance data and store it in a sql-lite server. [yfinance link](https://pypi.org/project/yfinance/)
+
+Example sets of stocks we will be pulling are below:
+
+| Airlines (JETS)         | Tech (XLK)       | Energy (XLE) | Retail (XRT) | Media (XLC) | Travel/Transporation (AWAY) | Misc      |
+| ----------------------- | ---------------- | ------------ | ------------ | ----------- | --------------------------- | --------- |
+| Delta (DAL)             | Microsoft (MSFT) | ---          | ---          | ---         | Uber (UBER)                 | ZOOM (ZM) |
+| American Airlines (AAL) | Apple (AAPL)     | ---          | ---          | ---         | Booking (BKNG)              | ---       |
+| Southwest (LUV)         | Visa (V)         | ---          | ---          | ---         | Lyft (LYFT)                 | ---       |
+| United Airlines (UAL)   | Intel (INTC)     | ---          | ---          | ---         | Trip.com (TCOM)             | ---       |
 
 ## Visualizations
 
