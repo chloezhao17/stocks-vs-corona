@@ -81,6 +81,9 @@ target/
 profile_default/
 ipython_config.py
 
+# JavaScript - Added by Patrick H. Patin to prevent sharing our API Keys
+config.js
+
 # pyenv
 .python-version
 
