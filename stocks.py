@@ -6,6 +6,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify
+import yfinance as yf
+import stockData as sd
+
+retVal = sd.refresh()
+print(retVal)
 
 
 #################################################
@@ -21,7 +26,6 @@ Base.prepare(engine, reflect=True)
 # Save reference to the table
 Stocks = Base.classes.stocks
 
-
 def jsonifyData(queryResults):
     # Create a dictionary from the row data and append to a list of all_passengers
     all_stocks = []
@@ -36,7 +40,6 @@ def jsonifyData(queryResults):
         all_stocks.append(stocks_dict)
 
     return jsonify(all_stocks)
-
 
 #################################################
 # Flask Setup
@@ -63,13 +66,11 @@ def all():
     session = Session(engine)
 
     # Query all stocks
-    results = session.query(Stocks.date, Stocks.name, Stocks.low,
-                            Stocks.high, Stocks.open, Stocks.close).all()
+    results = session.query(Stocks.date, Stocks.name, Stocks.low, Stocks.high, Stocks.open, Stocks.close).all()
 
     session.close()
 
     return jsonifyData(results)
-
 
 @app.route("/api/v1.0/bycategory/<category>")
 def by_category(category):
@@ -77,27 +78,11 @@ def by_category(category):
     session = Session(engine)
 
     # Query all airline stocks by category
-    results = session.query(Stocks.date, Stocks.name, Stocks.low, Stocks.high,
-                            Stocks.open, Stocks.close).filter(Stocks.category == category).all()
+    results = session.query(Stocks.date, Stocks.name, Stocks.low, Stocks.high, Stocks.open, Stocks.close).filter(Stocks.category == category).all()
 
     session.close()
 
-    return jsonifyData(results)
-
+    return jsonifyData(results)   
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-#####################################################################################
- def example():
- response = requests.get(
-            "http://ddragon.leagueoflegends.com/cdn/10.4.1/data/en_US/champion.json").json()
-        response
-
-        champion = []
-        key = []
-        for champ in response["data"]:
-            champion.append(champ)
-            key.append(int(response["data"][champ]["key"]))
-        champ_df = pd.DataFrame({"key": key, "champion": champion})
