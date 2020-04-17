@@ -19,7 +19,7 @@ We will be using the yfinance python library to pull yahoo finance data and stor
 
 Example sets of stocks we will be pulling are below:
 
-| Airlines (JETS)         | Tech (XLK)       | Utilities (VPU) | Retail (XRT) | Media (XLC) | Travel/Transporation (AWAY) | Misc      |
+| Airlines (JETS)         | Tech (XLK)       | Utilities (VPU) | Retail (XRT) | Media (XLC) | Travel/Transporation (AWAY) |  (MISC)   |
 | ----------------------- | ---------------- | --------------- | ------------ | ----------- | --------------------------- | --------- |
 | Delta (DAL)             | Microsoft (MSFT) | ---             | ---          | ---         | Uber (UBER)                 | ZOOM (ZM) |
 | American Airlines (AAL) | Apple (AAPL)     | ---             | ---          | ---         | Booking (BKNG)              | ---       |
