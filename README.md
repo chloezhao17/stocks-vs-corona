@@ -19,12 +19,12 @@ We will be using the yfinance python library to pull yahoo finance data and stor
 
 Example sets of stocks we will be pulling are below:
 
-| Airlines (JETS)         | Tech (XLK)       | Utilities (VPU) | Retail (XRT) | Media (XLC) | Travel/Transporation (AWAY) |  (MISC)   |
-| ----------------------- | ---------------- | --------------- | ------------ | ----------- | --------------------------- | --------- |
-| Delta (DAL)             | Microsoft (MSFT) | ---             | ---          | ---         | Uber (UBER)                 | ZOOM (ZM) |
-| American Airlines (AAL) | Apple (AAPL)     | ---             | ---          | ---         | Booking (BKNG)              | ---       |
-| Southwest (LUV)         | Visa (V)         | ---             | ---          | ---         | Lyft (LYFT)                 | ---       |
-| United Airlines (UAL)   | Intel (INTC)     | ---             | ---          | ---         | Trip.com (TCOM)             | ---       |
+| Airlines (JETS)         | Tech (XLK)       | Utilities (VPU)  | Media (XLC)        | Travel/Transporation (AWAY) |  (MISC)   |
+| ----------------------- | ---------------- | ---------------- | ------------------ | --------------------------- | --------- |
+| Delta (DAL)             | Microsoft (MSFT) | NextEra (NEE)    | Facebook (FB)      | Uber (UBER)                 | ZOOM (ZM) |
+| American Airlines (AAL) | Apple (AAPL)     | Dominion (D)     | Alphabet-C (GOOG)  | Booking (BKNG)              | ---       |
+| Southwest (LUV)         | Visa (V)         | Duke (DUK)       | Alphabet-A (GOOGL) | Lyft (LYFT)                 | ---       |
+| United Airlines (UAL)   | Intel (INTC)     | Southern Co (SO) | T-Mobile (TMUS)    | Trip.com (TCOM)             | ---       |
 
 ## Visualizations
 
