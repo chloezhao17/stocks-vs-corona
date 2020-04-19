@@ -1,43 +1,251 @@
-import sqlalchemy
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
+import sqlite3
+import time
+import pandas as pd
+
+from sqlite3 import Error
 from pprint import pprint
 
-import yfinance as yf
+# https://medium.com/alpha-vantage/get-started-with-alpha-vantage-data-619a70c7f33a
+from alpha_vantage.timeseries import TimeSeries
+from alpha_vantage.techindicators import TechIndicators
 
-def refresh(dbLocation):
-    engine = create_engine(dbLocation)
+# Import API key
+from api_keys import api_key
+
+# Technically, these are all constants
+old_to_new = {"1. open": "open", "2. high": "high", "3. low": "low", "4. close": "close", "5. volume": "volume"}
+reorder = ["date", "ticker", "open", "high", "low", "close", "volume"]
+
+# Create a list of ticker symbols
+stocks = ["DAL", "AAL", "LUV", "UAL", "MSFT", "AAPL", "V", "INTC", "NEE", "D", "DUK", "SO", "FB", "GOOG", "GOOGL", "TMUS", "UBER", "BKNG", "LYFT", "TCOM", "ZM"]
 
 
-
-
-
-    # Create a list of ticker symbols
-    stocks = ["DAL", "AAL", "LUV", "UAL", "MSFT", "AAPL", "V", "INTC", "UBER", "BKNG", "LYFT", "TCOM", "ZM"]
+def delTable(tableName):
+    retVal = False
     
-    for stockTicker in stocks:
-        print(f"Getting data for ticker:'{stockTicker}'")
-
-        try:
-            # stockData = yf.download("", start="2020-01-01", end="2020-04-10")
-            # can also use 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo and ytd
-            stockData = yf.download(tickers=stockTicker, period="ytd", auto_adjust=True, prepost=False, threads=True, proxy=None)
-
-            pprint(stockData)
-        except Error as e:
-            print(f"The API failed for the stock '{stockTicker}'. Please try again later.  The error was:/n{e}")
-        finally:
-            print("The update process has completed.")
-        # End Try
-    # Next stockTicker
-# End refresh()
-
-if __name__ == '__main__':
-    refresh(r"sqlite:///static/data/stocks.sqlite")
+    try:
+        # get our connection
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
+        
+        # create our cursor
+        cur = conn.cursor()
+        cur.execute(f"DROP TABLE IF EXISTS {tableName}")
+        retVal = True
+    except Error as e:
+            print(f"Could not drop the table named '{tableName}'./n/n  Error is:  {e}")
+            retVal = False
+    finally:
+        # make sure we close our connection
+        conn.close()
+        return retVal
+    # end try
+# end delTable(tableName)
 
 
+# Function to get tickers from category
+# returns tuple
+def getStocks(category):
+    mygetStocks = []
     
+    try:
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
 
-refresh()
+        cur = conn.cursor()
+        cur.execute(f"SELECT ticker FROM categories WHERE category = '{category}'")
+        rows = cur.fetchall()
+        conn.close()
+        for row in rows:
+            mygetStocks.append(row[0])
+        # next row
+        
+    except Error as e:
+        print(f"The API failed for the category '{category}'. Please try again later./n/n  Error is:  {e}")
+    finally:
+        conn.close()
+    # end try
+    
+    return mygetStocks
+# end getStocks()
 
+
+# Function to get category from ticker
+# returns string
+def getCategory(ticker):
+    mygetCategory = ""
+    
+    try:
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
+
+        cur = conn.cursor()
+        cur.execute(f"SELECT category FROM categories WHERE ticker = '{ticker}'")
+        rows = cur.fetchall()
+        conn.close()
+        
+        for row in rows:
+            mygetCategory = row[0]
+        # next row
+        
+    except Error as e:
+        print(f"The API failed for the stock '{ticker}'. Please try again later./n/n  Error is:  {e}")
+    finally:
+        conn.close()
+    # end try
+    
+    return mygetCategory
+# end getCategory(ticker)
+
+
+def storeData(df_Stock):
+    try:
+        # store the ticker sykmbol
+        ticker = df_Stock["ticker"][0]
+        
+        # get our connection
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
+        
+        # create our cursor
+        cur = conn.cursor()
+        
+        # first check to see if our table exists
+        cur.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='stocks'")
+
+        # if the count is 1, then our table exists
+        if cur.fetchone()[0]==1:
+            cur.execute(f"DELETE FROM stocks WHERE ticker = '{ticker}'")
+        # end if
+        
+        # add this stock data to our database
+        df_Stock.to_sql(name="stocks", con=conn, if_exists="append", index=True)
+    
+    except Error as e:
+            print(f"Save failed for the stock: '{ticker}'. Please try again later./n/n  Error is:  {e}")
+    finally:
+        # make sure we close our connection
+        conn.close()
+    # end try
+# end storeData()
+
+
+def refresh():
+    # Delete the stocks table.  We'll add it back as we add data
+    if (delTable("stocks") == True):
+        for stockTicker in stocks:
+            print(f"Getting data for ticker:'{stockTicker}'")
+
+            try:
+                # Chose your output format, or default to JSON (python dict)
+                ts = TimeSeries(api_key, output_format='pandas')
+
+                # aapl_data is a pandas dataframe, aapl_meta_data is a dict
+                stockData, meta_data = ts.get_daily(symbol=stockTicker)
+
+                # add the ticker column
+                stockData["ticker"] = stockTicker
+
+                # because "date" is not a field but rather an index
+                # reset the index so "date" is a field
+                stockData.reset_index(inplace=True)
+
+                # rename the columns
+                stockData.rename(columns=old_to_new, inplace=True)
+
+                # reorder the columns
+                stockData = stockData[reorder]  
+
+                # convert to datetime
+                stockData["date"] = pd.to_datetime(stockData["date"])
+
+                # set the index
+                stockData.set_index("date", inplace=True)
+
+                # convert the numeric fields to float
+                stockData[["open", "high", "low", "close", "volume"]] = stockData[["open", "high", "low", "close", "volume"]].apply(pd.to_numeric)
+                
+                # stick all the data into our SQLite database
+                storeData(stockData)
+
+                time.sleep(12)
+            except Error as e:
+                print(f"The API failed for the stock '{stockTicker}'. Please try again later./n/n  Error is:  {e}")
+            finally:
+                print("The update process has completed.")
+            # End Try
+        # Next stockTicker
+    # end if
+# end refresh()
+
+
+def getStockDataByCategory(category):
+    myStocks = []
+    
+    try:
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
+
+        cur = conn.cursor()
+        cur.execute(f"SELECT date(stocks.date), stocks.ticker, categories.company, stocks.open, stocks.high, stocks.low, stocks.close, stocks.volume, covid19.description FROM stocks INNER JOIN categories ON categories.ticker = stocks.ticker INNER JOIN covid19 ON date(covid19.date) = date(stocks.date) WHERE categories.category = '{category}'")
+        rows = cur.fetchall()
+        conn.close()
+        
+        for row in rows:
+            myStocks.append({
+                "date": row[0],
+                "ticker": row[1],
+                "company": row[2],
+                "open": row[3],
+                "high": row[4], 
+                "low": row[5],
+                "close": row[6],
+                "volume": row[7],
+                "description": row[8]
+            })
+#         next row
+        
+    except Error as e:
+        print(f"The database query failed for the category '{category}'./n/n  Error is:  {e}")
+    finally:
+        conn.close()
+    # end try
+    
+    return myStocks
+# end getStockDataByCategory(category)
+
+
+def getStockDataByTicker(ticker):
+    mygetStockDataByTicker = []
+
+    try:
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
+
+        cur = conn.cursor()
+        cur.execute(f"SELECT date(stocks.date) as date, stocks.ticker, company, open, high, low, close, volume, description FROM stocks LEFT JOIN categories ON categories.ticker = stocks.ticker LEFT JOIN covid19 ON date(covid19.date) = date(stocks.date) WHERE stocks.ticker = '{ticker}'")
+        rows = cur.fetchall()
+
+        conn.close()
+        for row in rows:
+            mygetStockDataByTicker.append({
+                "date": row[0],
+                "ticker": row[1],
+                "company": row[2],
+                "open": row[3],
+                "high": row[4], 
+                "low": row[5],
+                "close": row[6],
+                "volume": row[7],
+                "description": row[8]
+            })
+#         next row
+
+    except Error as e:
+        print(f"The database query failed for the stock '{ticker}'./n/n  Error is:  {e}")
+    finally:
+        conn.close()
+    # end try
+
+    return mygetStockDataByTicker
+# end getStockDataByTicker(ticker)
+
+
+# if __name__ == '__main__':
+#     refresh(r"sqlite:///static/data/stocks.sqlite")
+
+# refresh()
