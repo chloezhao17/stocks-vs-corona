@@ -19,6 +19,9 @@ reorder = ["date", "ticker", "open", "high", "low", "close", "volume"]
 # Create a list of ticker symbols
 stocks = ["DAL", "AAL", "LUV", "UAL", "MSFT", "AAPL", "V", "INTC", "NEE", "D", "DUK", "SO", "FB", "GOOG", "GOOGL", "TMUS", "UBER", "BKNG", "LYFT", "TCOM", "ZM"]
 
+# The SQL for pulling stocks is basically the same except for the value passed in.
+baseSQL = "SELECT date(stocks.date) as date, stocks.ticker, company, open, high, low, close, volume FROM stocks LEFT JOIN categories ON categories.ticker = stocks.ticker"
+
 
 def delTable(tableName):
     retVal = False
@@ -175,19 +178,18 @@ def refresh():
 # end refresh()
 
 
-def getStockDataByCategory(category):
-    myStocks = []
-    
+def runQuery(SQL):    
+    retVal = []
     try:
         conn = sqlite3.connect(r"static/data/stocks.sqlite")
 
         cur = conn.cursor()
-        cur.execute(f"SELECT date(stocks.date), stocks.ticker, categories.company, stocks.open, stocks.high, stocks.low, stocks.close, stocks.volume, covid19.description FROM stocks INNER JOIN categories ON categories.ticker = stocks.ticker INNER JOIN covid19 ON date(covid19.date) = date(stocks.date) WHERE categories.category = '{category}'")
+        cur.execute(SQL)
         rows = cur.fetchall()
         conn.close()
         
         for row in rows:
-            myStocks.append({
+            retVal.append({
                 "date": row[0],
                 "ticker": row[1],
                 "company": row[2],
@@ -195,54 +197,85 @@ def getStockDataByCategory(category):
                 "high": row[4], 
                 "low": row[5],
                 "close": row[6],
-                "volume": row[7],
-                "description": row[8]
+                "volume": row[7]
             })
 #         next row
         
     except Error as e:
-        print(f"The database query failed for the category '{category}'./n/n  Error is:  {e}")
+        print(f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
     finally:
         conn.close()
     # end try
     
-    return myStocks
+    return retVal
+# end runQuery(SQL)
+
+def getStockDataByCategory(category):
+    mySQL = f"{baseSQL} WHERE categories.category = '{category}'"
+    return (runQuery(mySQL))
 # end getStockDataByCategory(category)
 
 
 def getStockDataByTicker(ticker):
-    mygetStockDataByTicker = []
+    mySQL = f"{baseSQL} WHERE stocks.ticker = '{ticker}'"
+    return (runQuery(mySQL))
+# end getStockDataByCategory(category)
 
+
+def getCovidDates():
+    retVal = []
+    SQL = "SELECT date(date) as date, description FROM covid19"
     try:
         conn = sqlite3.connect(r"static/data/stocks.sqlite")
 
         cur = conn.cursor()
-        cur.execute(f"SELECT date(stocks.date) as date, stocks.ticker, company, open, high, low, close, volume, description FROM stocks LEFT JOIN categories ON categories.ticker = stocks.ticker LEFT JOIN covid19 ON date(covid19.date) = date(stocks.date) WHERE stocks.ticker = '{ticker}'")
+        cur.execute(SQL)
         rows = cur.fetchall()
-
         conn.close()
+        
         for row in rows:
-            mygetStockDataByTicker.append({
+            retVal.append({
                 "date": row[0],
-                "ticker": row[1],
-                "company": row[2],
-                "open": row[3],
-                "high": row[4], 
-                "low": row[5],
-                "close": row[6],
-                "volume": row[7],
-                "description": row[8]
+                "label": row[1]
             })
 #         next row
-
+        
     except Error as e:
-        print(f"The database query failed for the stock '{ticker}'./n/n  Error is:  {e}")
+        print(f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
     finally:
         conn.close()
     # end try
+    
+    return retVal
+# end getCovidDates()
 
-    return mygetStockDataByTicker
-# end getStockDataByTicker(ticker)
+
+def getStocksList():
+    retVal = []
+    SQL = "SELECT category, ticker FROM categories"
+    try:
+        conn = sqlite3.connect(r"static/data/stocks.sqlite")
+
+        cur = conn.cursor()
+        cur.execute(SQL)
+        rows = cur.fetchall()
+        conn.close()
+        
+        for row in rows:
+            retVal.append({
+                "etf": row[0],
+                "ticker": row[1]
+            })
+#         next row
+        
+    except Error as e:
+        print(f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
+    finally:
+        conn.close()
+    # end try
+    
+    return retVal
+# end getStocksList()
 
 
 # if __name__ == '__main__':

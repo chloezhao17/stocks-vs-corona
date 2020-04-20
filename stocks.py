@@ -18,27 +18,46 @@ def welcome():
         f"Available Routes:<br>"
         f"/api/v1.0/refresh<br>"
         f"/api/v1.0/byticker/<ticker><br>"
-        f"/api/v1.0/bycategory/<category>"
+        f"/api/v1.0/bycategory/<category><br>"
+        f"/api/v1.0/getcovid19dates<br>"
+        f"/api/v1.0/getetfstocks"
     )
 # End welcome()
 
 
+# test - http://127.0.0.1:5000/api/v1.0/byticker/AAPL
 @app.route("/api/v1.0/byticker/<ticker>")
 def byTicker(ticker):
     return jsonify(stockData.getStockDataByTicker(ticker.upper()))
 # End byTicker()
 
 
+# test - http://127.0.0.1:5000/api/v1.0/bycategory/JETS
 @app.route("/api/v1.0/bycategory/<category>")
 def byCategory(category):
     return jsonify(stockData.getStockDataByCategory(category.upper()))
 # End byCategory()
 
 
+# test - http://127.0.0.1:5000/api/v1.0/refresh
 @app.route("/api/v1.0/refresh")
 def refreshStocks(category):
     stockData.refresh()
-    return "Success!"
+    return "success!"
+# End byCategory()
+
+
+# test - http://127.0.0.1:5000/api/v1.0/getcovid19dates
+@app.route("/api/v1.0/getcovid19dates")
+def getCovidDatesList():
+    return jsonify(stockData.getCovidDates())
+# End byCategory()
+
+
+# test - http://127.0.0.1:5000/api/v1.0/getetfstocks
+@app.route("/api/v1.0/getetfstocks")
+def getETFStocksList():
+    return jsonify(stockData.getStocksList())
 # End byCategory()
 
 
