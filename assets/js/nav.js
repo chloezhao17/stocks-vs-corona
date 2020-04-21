@@ -16,7 +16,7 @@ function append(parent, child) {
 
 // get data using API calls
 // &output=json
-fetch("http://localhost:127.0.0.1:5000/api/v1.0/byticker/{ticker}")
+fetch("http://127.0.0.1:5000/api/v1.0/getetfstocks")
   .then((response) => {
     return response.json();
   })
