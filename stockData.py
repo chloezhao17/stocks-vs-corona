@@ -251,30 +251,29 @@ def getCovidDates():
 
 
 def getStocksList():
-    retVal = []
     SQL = "SELECT category, ticker FROM categories"
     try:
         conn = sqlite3.connect(r"static/data/stocks.sqlite")
-
+        print("test")
         cur = conn.cursor()
         cur.execute(SQL)
         rows = cur.fetchall()
         conn.close()
-        
+        etfDict = {}
         for row in rows:
-            retVal.append({
-                "etf": row[0],
-                "ticker": row[1]
-            })
+            if(row[0] in etfDict):
+                etfDict[row[0]].append(row[1])
+            else:
+                etfDict[row[0]] = [row[1]]
 #         next row
-        
+
     except Error as e:
-        print(f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
+        print(
+            f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
     finally:
         conn.close()
     # end try
-    
-    return retVal
+    return etfDict
 # end getStocksList()
 
 
