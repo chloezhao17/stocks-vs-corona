@@ -1,12 +1,12 @@
 import numpy as np
 import stockData as stockData
 from flask import Flask, jsonify
-
+from flask_cors import CORS
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
-
+CORS(app)
 
 #################################################
 # Flask Routes
