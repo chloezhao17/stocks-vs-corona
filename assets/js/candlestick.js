@@ -40,7 +40,7 @@ function buildGraph(data) {
   // dateAxis.keepSelection = true;
 
   var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  valueAxis.tooltip.disabled = true;
+  valueAxis.tooltip.disabled = false;
   valueAxis.zIndex = 1;
   valueAxis.renderer.baseGrid.disabled = true;
   // height of axis
@@ -61,10 +61,10 @@ function buildGraph(data) {
   series.dataFields.valueY = "close";
   series.dataFields.lowValueY = "low";
   series.dataFields.highValueY = "high";
-  series.clustered = false;
-  series.tooltipText =
-    "open: {openValueY.value}\nlow: {lowValueY.value}\nhigh: {highValueY.value}\nclose: {valueY.value}";
-  series.name = "MSFT";
+  //series.clustered = false;
+  series.simplifiedProcessing = true;
+  series.tooltipText = "open: ${openValueY.value}\nlow: ${lowValueY.value}\nhigh: ${highValueY.value}\nclose: ${valueY.value}";
+  // series.name = "MSFT";
   series.defaultState.transitionDuration = 0;
 
   var valueAxis2 = chart.yAxes.push(new am4charts.ValueAxis());
@@ -123,7 +123,7 @@ function buildGraph(data) {
     .then((data) => {
       var cSeries = chart.series.push(new am4charts.LineSeries());
       cSeries.data = data["US"];
-      cSeries.dateFormatter.inputDateFormat = "yyyy-M-d";
+      cSeries.dateFormatter.inputDateFormat = "yyyy-MM-dd";
       cSeries.dataFields.valueY = "confirmed";
       cSeries.yAxis = valueAxis3;
       cSeries.dataFields.dateX = "date";
@@ -132,8 +132,8 @@ function buildGraph(data) {
     });
 
   var sbSeries = chart.series.push(new am4charts.LineSeries());
-  sbSeries.dataFields.valueY = "Close";
-  sbSeries.dataFields.dateX = "Date";
+  sbSeries.dataFields.valueY = "close";
+  sbSeries.dataFields.dateX = "date";
   scrollbarX.series.push(sbSeries);
   sbSeries.disabled = true;
   scrollbarX.marginBottom = 20;
