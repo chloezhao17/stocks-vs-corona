@@ -34,8 +34,8 @@ function handleClick() {
     : d3.selectAll("." + etf).classed("active", true);
 }
 function stockClickHandler(stock) {
-  fetch()
-    .then()
+  fetch("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
+    .then((response) => response.json())
     .then((data) => {
       drawGraph(stock, data);
       coronaUpdater(stock, data);
