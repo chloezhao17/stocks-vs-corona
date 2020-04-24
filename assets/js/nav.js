@@ -37,8 +37,16 @@ function stockClickHandler(stock) {
   fetch("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
     .then((response) => response.json())
     .then((data) => {
-      drawGraph(stock, data);
-      coronaUpdater(stock, data);
+      console.log("test")
+      am4core.ready(
+        buildGraph(
+          "http://127.0.0.1:5000/api/v1.0/byticker/" + stock
+          // "https://www.amcharts.com/wp-content/uploads/assets/stock/MSFT.csv"
+          // "https://pomber.github.io/covid19/timeseries.json"
+        )
+      ); // end am4core.ready()
+      // drawGraph(stock, data);
+      // coronaUpdater(stock, data);
     });
 }
 d3.select("body").selectAll(".etf").on("click", handleClick);

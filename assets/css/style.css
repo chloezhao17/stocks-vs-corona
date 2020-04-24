@@ -49,8 +49,8 @@ html {
 }
 #candlestick {
   width: 100%;
-  height: 500px;
-  background-color: blue;
+  height: 900px;
+  /* background-color: blue; */
 }
 
 #bar {
