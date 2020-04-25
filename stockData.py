@@ -16,8 +16,8 @@ from api_keys import api_key
 old_to_new = {"1. open": "open", "2. high": "high", "3. low": "low", "4. close": "close", "5. volume": "volume"}
 reorder = ["date", "ticker", "open", "high", "low", "close", "volume"]
 
-# Create a list of ticker symbols
-stocks = ["DAL", "AAL", "LUV", "UAL", "MSFT", "AAPL", "V", "INTC", "NEE", "D", "DUK", "SO", "FB", "GOOG", "GOOGL", "TMUS", "UBER", "BKNG", "LYFT", "TCOM", "ZM"]
+# Create a list of ticker symbols - ETFs are: ["JETS", "XLK", "VPU", "XLC", "AWAY"]
+stocks = ["JETS", "XLK", "VPU", "XLC", "AWAY", "DAL", "AAL", "LUV", "UAL", "MSFT", "AAPL", "V", "INTC", "NEE", "D", "DUK", "SO", "FB", "GOOG", "GOOGL", "TMUS", "UBER", "BKNG", "LYFT", "TCOM", "ZM"]
 
 # The SQL for pulling stocks is basically the same except for the value passed in.
 baseSQL = "SELECT date(stocks.date) as date, stocks.ticker, company, open, high, low, close, volume FROM stocks LEFT JOIN categories ON categories.ticker = stocks.ticker"
@@ -251,30 +251,29 @@ def getCovidDates():
 
 
 def getStocksList():
-    retVal = []
     SQL = "SELECT category, ticker FROM categories"
     try:
         conn = sqlite3.connect(r"static/data/stocks.sqlite")
-
+        print("test")
         cur = conn.cursor()
         cur.execute(SQL)
         rows = cur.fetchall()
         conn.close()
-        
+        etfDict = {}
         for row in rows:
-            retVal.append({
-                "etf": row[0],
-                "ticker": row[1]
-            })
+            if(row[0] in etfDict):
+                etfDict[row[0]].append(row[1])
+            else:
+                etfDict[row[0]] = [row[1]]
 #         next row
-        
+
     except Error as e:
-        print(f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
+        print(
+            f"The database query failed for the following statement:/n/n '{SQL}'./n/n  Error is:  {e}")
     finally:
         conn.close()
     # end try
-    
-    return retVal
+    return etfDict
 # end getStocksList()
 
 
