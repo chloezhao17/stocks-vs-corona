@@ -3,6 +3,7 @@ html {
   height: 100%;
   background-color: rgb(39, 39, 39);
   color: white;
+  font-family: "Pathway Gothic One", sans-serif;
 }
 .wrapper {
   min-height: 100vh;
@@ -128,4 +129,25 @@ html {
 }
 .nav-stocks.active {
   display: block;
+}
+#corona-info {
+  min-height: 400px;
+}
+#sidebar h4 {
+  font-size: 23px;
+}
+#dropdown {
+  width: 100%;
+  text-align: center;
+}
+#dropdown-info {
+  text-align: justify;
+  text-justify: inter-word;
+  font-size: 17px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  background: rgb(39, 39, 39);
+  /* background: rgb(4, 0, 54); */
+  padding: 5px;
+  border-radius: 5px;
 }
