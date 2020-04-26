@@ -80,20 +80,6 @@ html {
   box-sizing: border-box;
 }
 
-.collapsibleList li {
-  /* list-style-image : url('button.png'); */
-  cursor: auto;
-}
-
-li.collapsibleListOpen {
-  /* list-style-image : url('button-open.png'); */
-  cursor: pointer;
-}
-
-li.collapsibleListClosed {
-  /* list-style-image : url('button-closed.png'); */
-  cursor: pointer;
-}
 #nav-list {
   list-style-type: none;
   width: 100%;
@@ -107,22 +93,38 @@ li.collapsibleListClosed {
   width: 100%;
   padding: 0;
 }
+
 .etf {
   display: block;
   width: 100%;
   height: 100%;
+  background-color: #444040;
 }
+
+.etf:after {
+  font-size: 15px;
+  color: white;
+  content: "\003E";
+  float: right;
+  margin-left: 6px;
+}
+
+.etf.active:after {
+  content: "\2228";
+}
+
 .etf:hover {
   cursor: pointer;
 }
 .nav-stocks {
   display: none;
-  /* background-color: blue; */
   padding-left: 20px;
 }
 .nav-stocks.active:hover {
   cursor: pointer;
-  background-color: yellow;
+  background-color: darkgrey;
+  color: black;
+  font-weight: bold;
 }
 .nav-stocks.active {
   display: block;
