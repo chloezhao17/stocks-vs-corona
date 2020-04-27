@@ -69,7 +69,7 @@ function stockClickHandler(stock) {
   fetch("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
 
       // change top bar to the stock name when clicked
       d3.select("#stock-container").select("h3").remove();
@@ -77,10 +77,13 @@ function stockClickHandler(stock) {
         .select("div")
         .append("h3")
         .text(data[0].company + " (" + data[0].ticker + ")");
-      coronaUpdater(stock, data);
-      am4core.ready(
-        buildGraph("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
-      );
+      date = "2020-03-11";
+      coronaUpdater(date, stock, data);
+      try {
+        am4core.ready(
+          buildGraph("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
+        );
+      } catch (e) {}
     });
 }
 d3.select("body").selectAll(".etf").on("click", handleClick);
