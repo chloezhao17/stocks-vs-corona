@@ -39,15 +39,30 @@
           </nav>
         </div>
         <div class="col-md-10" style="height: 100%; padding: 0;">
-          <div class="row" style="margin: 0;">
-            <div class="col-md-6" id="title-container">
+          <div class="row" id="title-row" style="margin: 0;">
+            <div class="col-md-4" id="title-container">
               <div><h3>Corona vs Stock Prices</h3></div>
             </div>
-            <div class="col-md-3" id="stock-container">
+            <div class="col-md-5" id="stock-container">
               <div><h3></h3></div>
             </div>
             <div class="col-md-3" id="corona-difference-container">
-              <div><h3></h3></div>
+              <div style="position: relative;">
+                <h3></h3>
+                <span
+                  style="
+                    font-size: 10px;
+                    /* position: absolute; */
+                    bottom: 10px;
+                    width: 100%;
+                    display: block;
+                    box-sizing: border-box;
+                  "
+                >
+                  <!-- Change since outbreak of Corona in the US -->
+                  Change since Corona declared a pandemic
+                </span>
+              </div>
             </div>
           </div>
           <div class="row" style="margin: 0;">
@@ -57,7 +72,12 @@
                   <div id="filter-title"><h4>Filter:</h4></div>
                   <div style="float: left; margin-left: 15px;">
                     From:
-                    <input type="text" id="fromfield" class="amcharts-input" />
+                    <input
+                      type="text"
+                      id="fromfield"
+                      class="amcharts-input"
+                      style="margin-right: 20px;"
+                    />
                     To:
                     <input type="text" id="tofield" class="amcharts-input" />
                   </div>

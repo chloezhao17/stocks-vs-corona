@@ -21,11 +21,15 @@ fetch("http://127.0.0.1:5000/api/v1.0/getetfstocks")
           .text(ticker)
           .classed(key, true)
           .classed("nav-stocks", true)
-          .on("click", () => {
+          .on("click", function () {
             stockClickHandler(ticker);
+            d3.select(this).classed("selected", true);
           });
       });
     });
+    //Initialize first stock
+    stockClickHandler(d3.select(".nav-stocks").text());
+    d3.select(".nav-stocks").classed("selected", true);
   });
 
 // when etf is clicked, do following:
@@ -41,7 +45,7 @@ function handleClick() {
     : d3.select(".etf" + etf).classed("active", true);
 
   // When next etf clicked, clear stock info at the top
-  d3.select("#stock-container").select("h3").remove();
+  // d3.select("#stock-container").select("h3").remove();
 }
 
 // When etf is clicked, draw graph, change the ticker name and append etf info
@@ -61,10 +65,12 @@ function handleClick() {
 
 // when stock is clicked, do following:
 function stockClickHandler(stock) {
+  d3.selectAll(".nav-stocks").classed("selected", false);
   fetch("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+
       // change top bar to the stock name when clicked
       d3.select("#stock-container").select("h3").remove();
       d3.select("#stock-container")

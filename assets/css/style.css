@@ -12,12 +12,12 @@ html {
   width: 100%;
   background-color: rgb(29, 29, 29);
   color: white;
-  height: 100%;
+  min-height: 100%;
 }
-.title-row {
-  height: 100px;
-  background-color: yellow;
-  width: 60%;
+#title-row {
+  height: 95px;
+  /* background-color: yellow; */
+  width: 100%;
   box-sizing: border-box;
 }
 .chart-container {
@@ -25,7 +25,7 @@ html {
 }
 .corona-impact {
   width: 30%;
-  height: 100px;
+  /* height: 100px; */
 }
 .container-fluid {
   padding-left: 0;
@@ -44,6 +44,10 @@ html {
   background: rgb(0, 0, 0);
   box-sizing: border-box;
   padding: 20px;
+  height: 100%;
+}
+#stock-container div {
+  overflow-y: auto;
 }
 #corona-difference-container {
   text-align: center;
@@ -87,7 +91,8 @@ html {
 #button-container {
   padding: 10px;
   /* background-color: green; */
-  border: 2px black solid;
+  /* border: 2px black solid; */
+  background-color: #000000;
   box-sizing: border-box;
 }
 
@@ -109,19 +114,28 @@ html {
   display: block;
   width: 100%;
   height: 100%;
-  background-color: #444040;
-}
 
+  box-sizing: border-box;
+  padding: 5px;
+}
+.etf:hover {
+  background-color: #000000;
+}
+.etf.active {
+  background-color: #000000;
+}
 .etf:after {
   font-size: 15px;
   color: white;
   content: "\003E";
+  content: "\25B7";
   float: right;
   margin-left: 6px;
 }
 
 .etf.active:after {
   content: "\2228";
+  content: "\25BD";
 }
 
 .etf:hover {
@@ -130,6 +144,15 @@ html {
 .nav-stocks {
   display: none;
   padding-left: 20px;
+  box-sizing: border-box;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: rgb(19, 19, 19);
+}
+.nav-stocks.selected {
+  background-color: darkgrey;
+  color: black;
+  font-weight: bold;
 }
 .nav-stocks.active:hover {
   cursor: pointer;
