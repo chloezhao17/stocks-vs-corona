@@ -9,6 +9,10 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Cuprum&family=Pathway+Gothic+One&display=swap"
       rel="stylesheet"
@@ -48,23 +52,38 @@
           <div class="row" style="margin: 0;">
             <div class="col-md-12" id="filter-container">
               <div id="button-container">
-                <div id="filter-title"><h4>Filter:</h4></div>
-                <div id="filters"><button>3 Months</button></div>
+                <div id="filters">
+                  <div id="filter-title"><h4>Filter:</h4></div>
+                  <div style="float: left; margin-left: 15px;">
+                    From:
+                    <input type="text" id="fromfield" class="amcharts-input" />
+                    To:
+                    <input type="text" id="tofield" class="amcharts-input" />
+                  </div>
+                  <div id="filter-button-container">
+                    <button id="b1m" class="amcharts-input">1m</button>
+                    <button id="b3m" class="amcharts-input">3m</button>
+                    <!-- <button id="b6m" class="amcharts-input">6m</button>
+                    <button id="b1y" class="amcharts-input">1y</button> -->
+                    <button id="bytd" class="amcharts-input">YTD</button>
+                    <button id="bmax" class="amcharts-input">MAX</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="row" style="margin: 0;">
             <div class="col-md-12" id="candlestick-container">
-              <div id="candlestick-title"><h3>CandleStick Chart</h3></div>
+              <div id="candlestick-title"></div>
               <div id="candlestick"></div>
             </div>
           </div>
-          <div class="row" style="margin: 0;">
+          <!-- <div class="row" style="margin: 0;">
             <div class="col-md-12" id="bar-container">
               <div id="bar-title"><h3>Bar Chart</h3></div>
               <div id="bar"></div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
