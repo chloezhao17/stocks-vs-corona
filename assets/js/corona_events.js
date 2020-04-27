@@ -31,3 +31,29 @@ fetch("http://127.0.0.1:5000/api/v1.0/getcovid19dates")
       d3.select("#dropdown-info").html(dropdown.node().value);
     });
   });
+
+function coronaUpdater(stock, data) {
+  var coronaCost = 0;
+  data.forEach((obj) => {
+    if (obj["date"] == "2020-01-21") {
+      coronaCost = obj["close"];
+    }
+  });
+  console.log(data[0]["close"]);
+  console.log(coronaCost);
+  var difference = data[0]["close"] - coronaCost;
+  console.log(difference);
+  if (difference < 0) {
+    difference = "-$" + Math.abs(Math.round(difference * 100) / 100);
+    d3.select("#corona-difference-container")
+      .select("h3")
+      .text(difference)
+      .style("color", "red");
+  } else {
+    difference = "+$" + Math.abs(Math.round(difference * 100) / 100);
+    d3.select("#corona-difference-container")
+      .select("h3")
+      .text(difference)
+      .style("color", "#00ff00");
+  }
+}

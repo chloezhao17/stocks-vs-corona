@@ -71,10 +71,10 @@ function stockClickHandler(stock) {
         .select("div")
         .append("h3")
         .text(data[0].company + " (" + data[0].ticker + ")");
+      coronaUpdater(stock, data);
       am4core.ready(
         buildGraph("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
       );
-      coronaUpdater(stock, data);
     });
 }
 d3.select("body").selectAll(".etf").on("click", handleClick);
