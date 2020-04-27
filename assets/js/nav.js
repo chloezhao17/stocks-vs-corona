@@ -64,15 +64,15 @@ function stockClickHandler(stock) {
   fetch("http://127.0.0.1:5000/api/v1.0/byticker/" + stock)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      // change top bar to the stock name when clicked
-      d3.select("#stock-container").select("h3").remove();
-      d3.select("#stock-container")
-        .select("div")
-        .append("h3")
-        .text(data[0].company + " (" + data[0].ticker + ")");
-      drawGraph(stock, data);
-      coronaUpdater(stock, data);
+      am4core.ready(
+        buildGraph(
+          "http://127.0.0.1:5000/api/v1.0/byticker/" + stock
+          // "https://www.amcharts.com/wp-content/uploads/assets/stock/MSFT.csv"
+          // "https://pomber.github.io/covid19/timeseries.json"
+        )
+      ); // end am4core.ready()
+      // drawGraph(stock, data);
+      // coronaUpdater(stock, data);
     });
 }
 d3.select("body").selectAll(".etf").on("click", handleClick);
