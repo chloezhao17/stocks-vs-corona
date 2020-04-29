@@ -1,2 +1,2 @@
-# quandl API Key
-api_key = "0VRGXOLV7FO2OEU7"
+# Alpha-Vantage API Key
+api_key = "YOUR KEY HERE"
